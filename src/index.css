@@ -11,3 +11,54 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.card{
+  width: 18rem;
+  margin-top: 10px;
+}
+.table{
+  margin-top: 10px;
+  margin-left: 40px;
+  width: 20.5rem;
+}
+.list-group-item{
+  margin-top: 10px;
+  width: 21rem;
+}
+.card-header{
+  font-size: large;
+}
+.add-button{
+  margin-top: 5px;
+  width: 285px;
+}
+.change-button{
+  margin-top: 5px;
+  width: 285px;
+}
+.pusto{
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  max-width: 680px;
+}
+.trig:hover{
+  background-color: aliceblue;
+}
+.add-card:hover{
+  background-color: rgb(240, 240, 240);
+}
+.comment{
+  width: 100%;
+}
+.redit{
+  position: relative;
+  left: 72%;
+  margin-top: 8px;
+  margin-left: 5px;
+}
+.edit-comment{
+  position: relative;
+  left:70%;
+}
