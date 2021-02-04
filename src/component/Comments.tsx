@@ -1,37 +1,34 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {IComment} from '../Interfaces'
 import {Edit} from './EditCommentForm'
-var idComment:number
 
 type CommentProps = {
     comments: IComment[],
     removeComment(id:number):void
+    changeComment(id:number, comment:string):void
 }
 
-export const Commentary: React.FC<CommentProps> = ({comments, removeComment}) => {
+export const Comments: React.FC<CommentProps> = ({comments, removeComment, changeComment}) => {
     const [show, setShow] = useState(false)
+    const [idComment, setIdComment] = useState(0)
     const getIdComment = (id:number) => {
-        idComment = id
+        setIdComment(id)
         setShow(true)
     }
-    const changeComment = (newComment:string) => {
-        comments.map(comment => {
-            if(comment.id === idComment){
-                comment.comment = newComment
-            }
-        })
+    const changeSelectedComment = (newComment:string) => {
+        changeComment(idComment, newComment)
     }
     const showInput = (show:boolean, comment:string) => {
         if(show) {
             return (
-                <Edit show={show} close={setShow} comment={comment} editComment={changeComment}/>
+                <Edit show={show} close={setShow} comment={comment} editComment={changeSelectedComment}/>
             )
         }
         else return comment
     }
     return (
         <>
-        {comments.map(comment => {
+        {comments.map((comment) => {
             return (
                 <div className="card comment" key={comment.id}>
                     <div className="card-header">
@@ -41,7 +38,7 @@ export const Commentary: React.FC<CommentProps> = ({comments, removeComment}) =>
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <a href="#" className='edit-comment' onClick={() => getIdComment(comment.id)}>Изменить</a>
-                    <div className="card-body">{comment.id === idComment ? showInput(show, comment.comment) : comment.comment}</div>
+                    <div className="card-body"><h6>{comment.id === idComment ? showInput(show, comment.comment) : comment.comment}</h6></div>
                 </div>
                 </div>
             )

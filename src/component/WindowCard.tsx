@@ -1,33 +1,28 @@
 import React, {useRef} from 'react'
 import {Modal, Button} from 'react-bootstrap'
 import {ICard} from '../Interfaces'
-import {Commentary} from './Comments'
+import {Comments} from './Comments'
 
 type ListProps  = {
   show:boolean, 
   onHide:any,
-  addCard(title:string, description:string): void
+  changeCard(title:string, description:string): void
   card:ICard
   addComment(id:number, comment:string):void
   removeComment(id:number):void
+  changeComment(id:number, comment:string):void
 }
 
 export const WindowCard: React.FC<ListProps> = (props) => {
-
   const refTitle = useRef<HTMLInputElement>(null)
   const refDescript = useRef<HTMLTextAreaElement>(null)
   const refComment = useRef<HTMLTextAreaElement>(null)
-  const newCard = () => {
-      props.addCard(refTitle.current!.value, refDescript.current!.value)
+  const changeCard = () => {
+      props.changeCard(refTitle.current!.value, refDescript.current!.value)
       refTitle.current!.value = ''
       refDescript.current!.value = ''
       props.onHide()
   }
-  const newComment = () => {
-    if(refComment.current!.value.length > 0)
-    props.addComment(props.card.id ,refComment.current!.value)
-  }
-
     return (
         <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -49,12 +44,17 @@ export const WindowCard: React.FC<ListProps> = (props) => {
             <label htmlFor="message-text" className="col-form-label">Комментарий:</label>
             <textarea ref={refComment} className="form-control" id="message-text"></textarea>
           </div>
-          <Button onClick={newComment}>Добавить комментарий</Button>
+          <Button onClick={() => {
+              if(refComment.current!.value.length > 0){
+                console.log('Пытаюсь добавить комментарий: ' + refComment.current!.value)
+                props.addComment(props.card.id, refComment.current!.value)
+              }
+          }}>Добавить комментарий</Button>
         </form>
-        <Commentary comments={props.card.comment} removeComment={props.removeComment}/>
+        <Comments comments={props.card.comments} removeComment={props.removeComment} changeComment={props.changeComment}/>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={newCard}>Сохранить</Button>
+        <Button onClick={changeCard}>Сохранить</Button>
       </Modal.Footer>
     </Modal>
     );

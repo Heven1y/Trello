@@ -1,7 +1,7 @@
 export interface ITable {
     title: string,
     id: number,
-    card: ICard[]
+    cards: ICard[]
 }
 
 export interface ICard {
@@ -9,7 +9,7 @@ export interface ICard {
     description: string,
     auctor: string,
     id: number,
-    comment: IComment[]
+    comments: IComment[]
 }
 
 export interface IComment{

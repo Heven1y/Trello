@@ -1,34 +1,34 @@
 import React, {useState, useEffect} from 'react'
+import { Board } from './component/Board'
 import { Navbar } from './component/Navbar'
-import {Table} from './component/Table'
 import { WindowUser } from './component/WindowUser'
 import {ICard, IComment, ITable} from './Interfaces'
 var userName:string = 'Admin'
 
 
 const App: React.FC = () => {
-  const [boards, setBoards] = useState<ITable[]>([])
+  const [lists, setList] = useState<ITable[]>([])
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('boards') || '[]') as ITable[]
-    setBoards(saved)
+    const saved = JSON.parse(localStorage.getItem('lists') || '[]') as ITable[]
+    setList(saved)
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('boards', JSON.stringify(boards))
-  }, [boards])
+    localStorage.setItem('lists', JSON.stringify(lists))
+  }, [lists])
 
   const newUser = (name:string) => {
       userName = name
   }
 
   const addBoard = (title:string) => {
-    const newBoard: ITable = {
+    const newList: ITable = {
       title: title,
       id: Date.now(),
-      card: []
+      cards: []
     }
-    setBoards(prev => [newBoard, ...boards])
+    setList(prev => [newList, ...prev])
   }
 
   const addCard = (title:string, description:string, idTable:number) => {
@@ -37,87 +37,105 @@ const App: React.FC = () => {
       id: Date.now(),
       description: description,
       auctor: userName,
-      comment: []
+      comments: []
     }
     console.log(title)
     console.log(description)
     console.log(idTable)
-    setBoards(prev => prev.map(board => {
-      if(board.id === idTable){
-        board.card.push(newCard)
+    setList(prev => prev.map(list => {
+      if(list.id === idTable){
+        list.cards = [newCard, ...list.cards]
       }
-      return board
+      return list
     }))
 
   }
 
   const addComment = (idCard:number, comment:string) => {
+    console.log('id: ' + idCard + " comment: " + comment)
     const newComment: IComment = {
       id: Date.now(),
       comment: comment,
       auctor: userName
     }
-    setBoards(prev => prev.map(board => {
-      board.card.map(card => {
-        if(card.id === idCard){
-          card.comment.push(newComment)
-        }
-        return card
-      })
-      return board
+    setList(prev => prev.map(list => {
+      return {
+        ...list, 
+        cards: list.cards.map(card => {
+          if(card.id === idCard){
+            return {
+              ...card, 
+              comments: [newComment, ...card.comments],
+            }
+          }
+          return card
+        })
+      }
     }))
-
   }
 
   const changeHandler = (id:number, title:string) => {
-      setBoards(prev => prev.map(board => {
-        if(board.id === id){
-          board.title = title
+      setList(prev => prev.map(list => {
+        if(list.id === id){
+          list.title = title
         }
-        return board
+        return list
       }))
   }
 
   const removeHandler = (id:number) => {
-      setBoards(prev => prev.filter(board => board.id !== id))
+      setList(prev => prev.filter(list => list.id !== id))
   }
 
   const removeCard = (id:number) => {
-    setBoards(prev => prev.map(board => {
-      board.card = board.card.filter(card => {
+    setList(prev => prev.map(list => {
+      list.cards = list.cards.filter(card => {
         return card.id !== id
       })
-      return board
+      return list
     }))
   }
   const removeComment = (id:number) => {
-    setBoards(prev => prev.map(board => {
-      board.card.map(card => {
-        card.comment = card.comment.filter(comm => {
+    setList(prev => prev.map(list => {
+      list.cards.map(card => {
+        card.comments = card.comments.filter(comm => {
           return comm.id !== id
         })
       })
-      return board
+      return list
     }))
   }
   const changeCard = (id:number, title:string, description:string) => {
-    setBoards(prev => prev.map(board => {
-      board.card.map(card => {
+    setList(prev => prev.map(list => {
+      list.cards.map(card => {
         if(card.id === id){
           card.title = title
           card.description = description
         }
-        return card
       })
-      return board
+      return list
+    }))
+  }
+  const changeComment = (id:number, newComment:string) => {
+    setList(prev => prev.map(list => {
+      list.cards.map(card => {
+       card.comments.map(comment => {
+         if(comment.id === id){
+           comment.comment = newComment
+         }
+       })
+      })
+      return list
     }))
   }
   const [modalShow, setShow] = useState(true)
   return (
     <>
       <Navbar addTable={addBoard} user={userName}/>
-      <Table boards={boards} onChange={changeHandler} onRemove={removeHandler} addCard={addCard} 
-      removeCard={removeCard} changeCard={changeCard} addComment={addComment} removeComment={removeComment}/>
+      <Board lists={lists} onChange={changeHandler} onRemove={removeHandler} addCard={addCard} 
+      removeCard={removeCard} changeCard={changeCard} addComment={addComment} 
+      removeComment={removeComment} changeComment={changeComment}>
+      </Board>
       <WindowUser show={modalShow} onHide={() => setShow(false)} newUser={newUser}/>
     </>
   );
