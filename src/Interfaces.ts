@@ -1,4 +1,4 @@
-export interface ITable {
+export interface IList {
     title: string,
     id: number,
     cards: ICard[]

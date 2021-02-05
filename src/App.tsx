@@ -2,15 +2,18 @@ import React, {useState, useEffect} from 'react'
 import { Board } from './component/Board'
 import { Navbar } from './component/Navbar'
 import { WindowUser } from './component/WindowUser'
-import {ICard, IComment, ITable} from './Interfaces'
+import {ICard, IComment, IList} from './Interfaces'
+import {List} from './component/List'
+import {Card} from './component/Card'
 var userName:string = 'Admin'
 
 
 const App: React.FC = () => {
-  const [lists, setList] = useState<ITable[]>([])
+  const [lists, setList] = useState<IList[]>([])
+  const [modalShow, setShow] = useState(true)
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('lists') || '[]') as ITable[]
+    const saved = JSON.parse(localStorage.getItem('lists') || '[]') as IList[]
     setList(saved)
   }, [])
 
@@ -22,8 +25,8 @@ const App: React.FC = () => {
       userName = name
   }
 
-  const addBoard = (title:string) => {
-    const newList: ITable = {
+  const addList = (title:string) => {
+    const newList: IList = {
       title: title,
       id: Date.now(),
       cards: []
@@ -39,12 +42,12 @@ const App: React.FC = () => {
       auctor: userName,
       comments: []
     }
-    console.log(title)
-    console.log(description)
-    console.log(idTable)
     setList(prev => prev.map(list => {
-      if(list.id === idTable){
-        list.cards = [newCard, ...list.cards]
+      if(idTable === list.id){
+        return {
+          ...list, 
+          cards: [newCard, ...list.cards]
+        }
       }
       return list
     }))
@@ -52,7 +55,6 @@ const App: React.FC = () => {
   }
 
   const addComment = (idCard:number, comment:string) => {
-    console.log('id: ' + idCard + " comment: " + comment)
     const newComment: IComment = {
       id: Date.now(),
       comment: comment,
@@ -74,16 +76,19 @@ const App: React.FC = () => {
     }))
   }
 
-  const changeHandler = (id:number, title:string) => {
+  const changeList = (id:number, title:string) => {
       setList(prev => prev.map(list => {
         if(list.id === id){
-          list.title = title
+          return {
+            ...list,
+            title: title
+          }
         }
         return list
       }))
   }
 
-  const removeHandler = (id:number) => {
+  const removeList = (id:number) => {
       setList(prev => prev.filter(list => list.id !== id))
   }
 
@@ -107,34 +112,74 @@ const App: React.FC = () => {
   }
   const changeCard = (id:number, title:string, description:string) => {
     setList(prev => prev.map(list => {
-      list.cards.map(card => {
-        if(card.id === id){
-          card.title = title
-          card.description = description
-        }
-      })
-      return list
+      return {
+        ...list,
+        cards: list.cards.map(card => {
+          if(card.id === id){
+            return {
+              ...card, 
+              title: title,
+              description: description
+            }
+          }
+          return card
+        }) 
+      }
     }))
   }
   const changeComment = (id:number, newComment:string) => {
     setList(prev => prev.map(list => {
-      list.cards.map(card => {
-       card.comments.map(comment => {
-         if(comment.id === id){
-           comment.comment = newComment
-         }
-       })
-      })
-      return list
+      return {
+        ...list,
+        cards: list.cards.map(card => {
+          return {
+              ...card, 
+              comments: card.comments.map(oldComment => {
+                if(oldComment.id === id){
+                  return {
+                    ...oldComment,
+                    comment: newComment
+                  }
+                }
+                return oldComment
+              })
+          }
+        }) 
+      }
     }))
   }
-  const [modalShow, setShow] = useState(true)
+  if(lists.length === 0){
+    return (
+      <>
+      <Navbar addTable={addList} user={userName}/>
+      <Board>
+      <h5 className='pusto'>Данная доска пуста, нажмите "Добавить список" для создания колонки</h5>
+      </Board>
+      <WindowUser show={modalShow} onHide={() => setShow(false)} newUser={newUser}/>
+    </>
+    )
+  }
   return (
     <>
-      <Navbar addTable={addBoard} user={userName}/>
-      <Board lists={lists} onChange={changeHandler} onRemove={removeHandler} addCard={addCard} 
-      removeCard={removeCard} changeCard={changeCard} addComment={addComment} 
-      removeComment={removeComment} changeComment={changeComment}>
+      <Navbar addTable={addList} user={userName}/>
+      <Board>
+        {lists.map(list => {
+            return (
+                <li key={list.id}>
+                <List list={list} onChange={changeList} onRemove={removeList} addCard={addCard}>
+                    {list.cards.map(card => {
+                        return (
+                            <div key={card.id}>
+                            <Card card={card} onRemove={removeCard} onChange={changeCard} 
+                            addComment={addComment} removeComment={removeComment} 
+                            changeComment={changeComment}/>
+                            </div>
+                        )
+                    })}
+                </List>
+                </li>
+            )
+        })}
       </Board>
       <WindowUser show={modalShow} onHide={() => setShow(false)} newUser={newUser}/>
     </>

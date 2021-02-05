@@ -10,15 +10,12 @@ interface ListProps {
 
 export const WindowList: React.FC<ListProps> = (props) => {
 
-    //const [title, setTitle] = useState<string>('')
-    //const changeHandler = (event:React.ChangeEvent<HTMLInputElement>) =>{
-     //   setTitle(event.target.value)
-    //}
     const ref = useRef<HTMLInputElement>(null)
     const saveTitle = () => {
         let nameBorder = {
           title: ref.current!.value
         }
+        if(nameBorder.title !== '')
         props.addTable(nameBorder.title)
         ref.current!.value = ''
         props.onHide()

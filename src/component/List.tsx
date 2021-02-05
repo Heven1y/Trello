@@ -1,17 +1,17 @@
 import React, {useState} from 'react'
 import { Button } from 'react-bootstrap';
-import { ITable } from '../Interfaces';
+import { IList } from '../Interfaces';
 import { WindowNewCard } from './WindowNewCard';
 import { WindowList } from './WindowList';
 
 type ListProps = {
-    list: ITable
+    list: IList
     onChange(id:number, title:string):void
     onRemove(id:number):void
     addCard(title:string, description:string, idTable:number):void
 }
 
-export const Table: React.FC<ListProps> = (props) =>{
+export const List: React.FC<ListProps> = (props) =>{
     const [modalShow, setShow] = useState(false)
     const [mShow, setName] = useState(false)
 

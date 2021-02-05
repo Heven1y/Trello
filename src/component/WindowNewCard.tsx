@@ -12,7 +12,7 @@ export const WindowNewCard: React.FC<ListProps> = (props) => {
   const refTitle = useRef<HTMLInputElement>(null)
   const refDescript = useRef<HTMLTextAreaElement>(null)
   const newCard = () => {
-      props.addCard(refTitle.current!.value, refDescript.current!.value)
+      if(refTitle.current!.value !== '') props.addCard(refTitle.current!.value, refDescript.current!.value)
       refTitle.current!.value = ''
       refDescript.current!.value = ''
       props.onHide()

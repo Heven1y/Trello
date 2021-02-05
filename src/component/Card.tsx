@@ -11,7 +11,7 @@ type CardProps = {
     changeComment(id:number, comment:string):void
 }
 
-export const Cards: React.FC<CardProps> = ({card, onRemove, onChange, addComment, removeComment, changeComment}) => {
+export const Card: React.FC<CardProps> = ({card, onRemove, onChange, addComment, removeComment, changeComment}) => {
     const [modalShow, setShow] = useState(false)
     const handleClose = () => {
         setShow(false)
