@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import { Button } from 'react-bootstrap';
 import { IList } from '../Interfaces';
 import { WindowNewCard } from './WindowNewCard';
-import { WindowList } from './WindowList';
+import {WindowList} from './WindowList';
+import {connect} from 'react-redux'
 
 type ListProps = {
     list: IList
@@ -11,7 +12,7 @@ type ListProps = {
     addCard(title:string, description:string, idTable:number):void
 }
 
-export const List: React.FC<ListProps> = (props) =>{
+const List: React.FC<ListProps> = (props) =>{
     const [modalShow, setShow] = useState(false)
     const [mShow, setName] = useState(false)
 
@@ -53,3 +54,5 @@ export const List: React.FC<ListProps> = (props) =>{
         </>
     );
 }
+
+export default List

@@ -3,24 +3,47 @@ import { Board } from './component/Board'
 import { Navbar } from './component/Navbar'
 import { WindowUser } from './component/WindowUser'
 import {ICard, IComment, IList} from './Interfaces'
-import {List} from './component/List'
+import List from './component/List'
 import {Card} from './component/Card'
+import {connect, ConnectedProps} from 'react-redux'
+import {addListAction, removeListAction, changeListAction, 
+  addCardAction, changeCardAction, removeCardAction,
+  addCommentAction, changeCommentAction, removeCommentAction} from './redux/actions'
 var userName:string = 'Admin'
+type PropsFromRedux = ConnectedProps<typeof connector>
 
+const mapDispatchToProps = {
+  addListAction,
+  removeListAction,
+  changeListAction,
+  addCardAction,
+  changeCardAction,
+  removeCardAction,
+  addCommentAction,
+  changeCommentAction,
+  removeCommentAction
+}
 
-const App: React.FC = () => {
-  const [lists, setList] = useState<IList[]>([])
+const mapStateToProps = (state:any) => {
+  return {
+    listsRedux: state.lists.lists
+  }
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+const App: React.FC<PropsFromRedux> = (props) => {
+  //const [lists, setList] = useState<IList[]>([])
   const [modalShow, setShow] = useState(true)
-
+/*
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('lists') || '[]') as IList[]
-    setList(saved)
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('lists', JSON.stringify(lists))
-  }, [lists])
-
+    localStorage.setItem('lists', JSON.stringify(props.listsRedux))
+  }, [props.listsRedux])
+*/
   const newUser = (name:string) => {
       userName = name
   }
@@ -31,7 +54,8 @@ const App: React.FC = () => {
       id: Date.now(),
       cards: []
     }
-    setList(prev => [newList, ...prev])
+    props.addListAction(newList)
+    //setList(prev => [newList, ...prev])
   }
 
   const addCard = (title:string, description:string, idTable:number) => {
@@ -42,16 +66,7 @@ const App: React.FC = () => {
       auctor: userName,
       comments: []
     }
-    setList(prev => prev.map(list => {
-      if(idTable === list.id){
-        return {
-          ...list, 
-          cards: [newCard, ...list.cards]
-        }
-      }
-      return list
-    }))
-
+    props.addCardAction(newCard, idTable)
   }
 
   const addComment = (idCard:number, comment:string) => {
@@ -60,95 +75,30 @@ const App: React.FC = () => {
       comment: comment,
       auctor: userName
     }
-    setList(prev => prev.map(list => {
-      return {
-        ...list, 
-        cards: list.cards.map(card => {
-          if(card.id === idCard){
-            return {
-              ...card, 
-              comments: [newComment, ...card.comments],
-            }
-          }
-          return card
-        })
-      }
-    }))
+    props.addCommentAction(idCard, newComment)
   }
 
   const changeList = (id:number, title:string) => {
-      setList(prev => prev.map(list => {
-        if(list.id === id){
-          return {
-            ...list,
-            title: title
-          }
-        }
-        return list
-      }))
+    props.changeListAction(id, title)
   }
 
   const removeList = (id:number) => {
-      setList(prev => prev.filter(list => list.id !== id))
+      props.removeListAction(id)
   }
 
   const removeCard = (id:number) => {
-    setList(prev => prev.map(list => {
-      list.cards = list.cards.filter(card => {
-        return card.id !== id
-      })
-      return list
-    }))
+    props.removeCardAction(id)
   }
   const removeComment = (id:number) => {
-    setList(prev => prev.map(list => {
-      list.cards.map(card => {
-        card.comments = card.comments.filter(comm => {
-          return comm.id !== id
-        })
-      })
-      return list
-    }))
+    props.removeCommentAction(id)
   }
   const changeCard = (id:number, title:string, description:string) => {
-    setList(prev => prev.map(list => {
-      return {
-        ...list,
-        cards: list.cards.map(card => {
-          if(card.id === id){
-            return {
-              ...card, 
-              title: title,
-              description: description
-            }
-          }
-          return card
-        }) 
-      }
-    }))
+    props.changeCardAction(id, title, description)
   }
   const changeComment = (id:number, newComment:string) => {
-    setList(prev => prev.map(list => {
-      return {
-        ...list,
-        cards: list.cards.map(card => {
-          return {
-              ...card, 
-              comments: card.comments.map(oldComment => {
-                if(oldComment.id === id){
-                  return {
-                    ...oldComment,
-                    comment: newComment
-                  }
-                }
-                return oldComment
-              })
-          }
-        }) 
-      }
-    }))
+    props.changeCommentAction(id, newComment)
   }
-  if(lists.length === 0){
+  if(props.listsRedux.length === 0){
     return (
       <>
       <Navbar addTable={addList} user={userName}/>
@@ -163,10 +113,16 @@ const App: React.FC = () => {
     <>
       <Navbar addTable={addList} user={userName}/>
       <Board>
-        {lists.map(list => {
+        {props.listsRedux.map((list:IList) => {
+            const propsList = {
+              list:list,
+              onChange:changeList,
+              onRemove:removeList,
+              addCard:addCard,
+            }
             return (
                 <li key={list.id}>
-                <List list={list} onChange={changeList} onRemove={removeList} addCard={addCard}>
+                <List {...propsList}>
                     {list.cards.map(card => {
                         return (
                             <div key={card.id}>
@@ -186,4 +142,4 @@ const App: React.FC = () => {
   );
 }
 
-export default App;
+export default connector(App)
