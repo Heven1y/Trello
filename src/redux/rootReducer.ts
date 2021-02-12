@@ -1,6 +1,6 @@
 import React from 'react'
 import { combineReducers } from 'redux'
-import { listReducer } from './Reducers'
+import { mainReducer } from './Reducers'
 export const rootReducer = combineReducers({
-    lists: listReducer
+    root: mainReducer
 })

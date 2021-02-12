@@ -1,7 +1,8 @@
 import React, {useRef} from 'react'
 import {Modal, Button} from 'react-bootstrap'
-import {ICard} from '../Interfaces'
+import {ICard, IComment} from '../Interfaces'
 import {Comments} from './Comments'
+import {useSelector} from 'react-redux'
 
 type ListProps  = {
   show:boolean, 
@@ -14,6 +15,9 @@ type ListProps  = {
 }
 
 export const WindowCard: React.FC<ListProps> = (props) => {
+  const commentsInCards = useSelector((state:any) => {
+    return state.root.comments
+  })
   const refTitle = useRef<HTMLInputElement>(null)
   const refDescript = useRef<HTMLTextAreaElement>(null)
   const refComment = useRef<HTMLTextAreaElement>(null)
@@ -51,7 +55,16 @@ export const WindowCard: React.FC<ListProps> = (props) => {
               }
           }}>Добавить комментарий</Button>
         </form>
-        <Comments comments={props.card.comments} removeComment={props.removeComment} changeComment={props.changeComment}/>
+        {
+          props.card.comments.map(commentId => {
+            return (
+              <div key={commentId}>
+              <Comments comment={commentsInCards.find((comment:IComment) => comment.id === commentId)} 
+              removeComment={props.removeComment} changeComment={props.changeComment}/>
+              </div>
+            )
+          })
+        }
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={changeCard}>Сохранить</Button>
@@ -59,3 +72,5 @@ export const WindowCard: React.FC<ListProps> = (props) => {
     </Modal>
     );
 }
+
+export default WindowCard

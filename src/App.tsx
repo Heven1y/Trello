@@ -26,24 +26,16 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state:any) => {
   return {
-    listsRedux: state.lists.lists
+    listsRedux: state.root.lists,
+    cardsRedux: state.root.cards
   }
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps)
 
 const App: React.FC<PropsFromRedux> = (props) => {
-  //const [lists, setList] = useState<IList[]>([])
   const [modalShow, setShow] = useState(true)
-/*
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('lists') || '[]') as IList[]
-  }, [])
 
-  useEffect(() => {
-    localStorage.setItem('lists', JSON.stringify(props.listsRedux))
-  }, [props.listsRedux])
-*/
   const newUser = (name:string) => {
       userName = name
   }
@@ -55,7 +47,6 @@ const App: React.FC<PropsFromRedux> = (props) => {
       cards: []
     }
     props.addListAction(newList)
-    //setList(prev => [newList, ...prev])
   }
 
   const addCard = (title:string, description:string, idTable:number) => {
@@ -123,15 +114,18 @@ const App: React.FC<PropsFromRedux> = (props) => {
             return (
                 <li key={list.id}>
                 <List {...propsList}>
-                    {list.cards.map(card => {
+                    {
+                    list.cards.map((cardId:number) => {
                         return (
-                            <div key={card.id}>
-                            <Card card={card} onRemove={removeCard} onChange={changeCard} 
+                            <div key={cardId}>
+                            <Card card={props.cardsRedux.find((card:ICard) => card.id === cardId)} 
+                            onRemove={removeCard} onChange={changeCard} 
                             addComment={addComment} removeComment={removeComment} 
                             changeComment={changeComment}/>
                             </div>
                         )
-                    })}
+                    })
+                    }
                 </List>
                 </li>
             )

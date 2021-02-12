@@ -3,12 +3,12 @@ import {IComment} from '../Interfaces'
 import {Edit} from './EditCommentForm'
 
 type CommentProps = {
-    comments: IComment[],
+    comment: IComment,
     removeComment(id:number):void
     changeComment(id:number, comment:string):void
 }
 
-export const Comments: React.FC<CommentProps> = ({comments, removeComment, changeComment}) => {
+export const Comments: React.FC<CommentProps> = ({comment, removeComment, changeComment}) => {
     const [show, setShow] = useState(false)
     const [idComment, setIdComment] = useState(0)
     const getIdComment = (id:number) => {
@@ -27,10 +27,8 @@ export const Comments: React.FC<CommentProps> = ({comments, removeComment, chang
         else return comment
     }
     return (
-        <>
-        {comments.map((comment) => {
-            return (
-                <div className="card comment" key={comment.id}>
+            
+                <div className="card comment">
                     <div className="card-header">
                     {'Автор: ' + comment.auctor}
                     <button type="button" className="close" data-dismiss="alert" 
@@ -41,8 +39,6 @@ export const Comments: React.FC<CommentProps> = ({comments, removeComment, chang
                     <div className="card-body"><h6>{comment.id === idComment ? showInput(show, comment.comment) : comment.comment}</h6></div>
                 </div>
                 </div>
-            )
-        })}
-        </>
+          
     );
 }

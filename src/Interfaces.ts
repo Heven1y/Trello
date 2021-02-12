@@ -1,7 +1,7 @@
 export interface IList {
     title: string,
     id: number,
-    cards: ICard[]
+    cards: ICard['id'][]
 }
 
 export interface ICard {
@@ -9,7 +9,7 @@ export interface ICard {
     description: string,
     auctor: string,
     id: number,
-    comments: IComment[]
+    comments: IComment['id'][]
 }
 
 export interface IComment{
