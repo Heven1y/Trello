@@ -1,6 +1,6 @@
 import React from 'react'
-import { IComment} from '../Interfaces'
-import { ADD_COMMENT, REMOVE_COMMENT, CHANGE_COMMENT } from './commentTypes'
+import { IComment} from '../../Interfaces'
+import { ADD_COMMENT, REMOVE_COMMENT, CHANGE_COMMENT } from './types'
 
 export const addCommentAction = (idCard:number, comment:IComment) => {
     return {

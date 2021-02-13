@@ -1,7 +1,7 @@
 import React from 'react'
-import { IList} from '../Interfaces'
-import {REMOVE_LIST, ADD_LIST, CHANGE_LIST} from './listTypes'
-import { REMOVE_CARD, ADD_CARD} from '../card/cardTypes'
+import { IList} from '../../Interfaces'
+import {REMOVE_LIST, ADD_LIST, CHANGE_LIST} from './types'
+import { REMOVE_CARD, ADD_CARD} from '../card/types'
 
 const initialState = { 
     lists: []

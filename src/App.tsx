@@ -6,9 +6,9 @@ import {ICard, IComment, IList} from './Interfaces'
 import List from './component/List'
 import {Card} from './component/Card'
 import {connect, ConnectedProps} from 'react-redux'
-import {addListAction, removeListAction, changeListAction} from './list/listActions' 
-import { addCardAction, changeCardAction, removeCardAction} from './card/cardActions'
-import {  addCommentAction, changeCommentAction, removeCommentAction} from './comment/commentActions'
+import {addListAction, removeListAction, changeListAction} from './redux/list/actions' 
+import { addCardAction, changeCardAction, removeCardAction} from './redux/card/actions'
+import {  addCommentAction, changeCommentAction, removeCommentAction} from './redux/comment/actions'
 var userName:string = 'Admin'
 type PropsFromRedux = ConnectedProps<typeof connector>
 

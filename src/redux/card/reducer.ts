@@ -1,7 +1,7 @@
 import React from 'react'
-import { ICard} from '../Interfaces'
-import {ADD_CARD, CHANGE_CARD, REMOVE_CARD} from './cardTypes'
-import {ADD_COMMENT, REMOVE_COMMENT} from '../comment/commentTypes'
+import { ICard} from '../../Interfaces'
+import {ADD_CARD, CHANGE_CARD, REMOVE_CARD} from './types'
+import {ADD_COMMENT, REMOVE_COMMENT} from '../comment/types'
 
 const initialState = { 
     cards: []

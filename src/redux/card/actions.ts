@@ -1,6 +1,6 @@
 import React from 'react'
-import { ICard} from '../Interfaces'
-import { ADD_CARD, REMOVE_CARD, CHANGE_CARD} from './cardTypes'
+import { ICard} from '../../Interfaces'
+import { ADD_CARD, REMOVE_CARD, CHANGE_CARD} from './types'
 export const addCardAction = (card:ICard, idList:number) => {
     return {
         type: ADD_CARD,

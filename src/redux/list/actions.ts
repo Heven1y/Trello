@@ -1,6 +1,6 @@
 import React from 'react'
-import { IList } from '../Interfaces'
-import { ADD_LIST, REMOVE_LIST, CHANGE_LIST } from './listTypes'
+import { IList } from '../../Interfaces'
+import { ADD_LIST, REMOVE_LIST, CHANGE_LIST } from './types'
 export const addListAction = (list:IList) => {
     return {
         type: ADD_LIST,
