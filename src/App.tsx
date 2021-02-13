@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { Board } from './component/Board'
 import { Navbar } from './component/Navbar'
 import { WindowUser } from './component/WindowUser'
@@ -6,9 +6,9 @@ import {ICard, IComment, IList} from './Interfaces'
 import List from './component/List'
 import {Card} from './component/Card'
 import {connect, ConnectedProps} from 'react-redux'
-import {addListAction, removeListAction, changeListAction, 
-  addCardAction, changeCardAction, removeCardAction,
-  addCommentAction, changeCommentAction, removeCommentAction} from './redux/actions'
+import {addListAction, removeListAction, changeListAction} from './list/listActions' 
+import { addCardAction, changeCardAction, removeCardAction} from './card/cardActions'
+import {  addCommentAction, changeCommentAction, removeCommentAction} from './comment/commentActions'
 var userName:string = 'Admin'
 type PropsFromRedux = ConnectedProps<typeof connector>
 

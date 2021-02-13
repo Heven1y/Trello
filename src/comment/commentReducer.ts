@@ -1,6 +1,6 @@
 import React from 'react'
 import {IComment} from '../Interfaces'
-import {ADD_COMMENT, CHANGE_COMMENT, REMOVE_COMMENT,} from './types'
+import {ADD_COMMENT, CHANGE_COMMENT, REMOVE_COMMENT,} from './commentTypes'
 
 const initialState = {
     comments: []
