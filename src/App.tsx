@@ -26,8 +26,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state:any) => {
   return {
-    listsRedux: state.root.lists,
-    cardsRedux: state.root.cards
+    listsRedux: state.list.lists,
+    cardsRedux: state.card.cards
   }
 }
 

@@ -16,7 +16,7 @@ type ListProps  = {
 
 export const WindowCard: React.FC<ListProps> = (props) => {
   const commentsInCards = useSelector((state:any) => {
-    return state.root.comments
+    return state.comment.comments
   })
   const refTitle = useRef<HTMLInputElement>(null)
   const refDescript = useRef<HTMLTextAreaElement>(null)
